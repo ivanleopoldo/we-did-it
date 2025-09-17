@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Image, View } from "react-native";
+import { Image as RNImage, ImageProps as RNImageProps } from "react-native";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
 
-type DynamicImageProps = {
+type ImageProps = {
   uri: string;
-};
+} & RNImageProps;
 
-export function DynamicImage({ uri }: DynamicImageProps) {
+export function Image({ className, ...props }: ImageProps) {
   const [ratio, setRatio] = useState<number | null>(null);
 
   useEffect(() => {
-    Image.getSize(
-      uri,
+    RNImage.getSize(
+      props.uri,
       (width, height) => {
         setRatio(width / height); // compute aspect ratio
       },
@@ -20,7 +21,7 @@ export function DynamicImage({ uri }: DynamicImageProps) {
         setRatio(16 / 9); // fallback
       },
     );
-  }, [uri]);
+  }, [props.uri]);
 
   if (!ratio) {
     return (
@@ -28,7 +29,14 @@ export function DynamicImage({ uri }: DynamicImageProps) {
         ratio={16 / 9}
         className="rounded-lg border overflow-hidden border-border"
       >
-        <View className="flex-1 bg-muted" />
+        <RNImage
+          {...props}
+          source={{
+            uri: props.uri,
+          }}
+          className={cn("w-full h-full", className)}
+          resizeMode="cover"
+        />
       </AspectRatio>
     );
   }
@@ -38,7 +46,14 @@ export function DynamicImage({ uri }: DynamicImageProps) {
       ratio={ratio}
       className="rounded-lg overflow-hidden border border-border"
     >
-      <Image source={{ uri }} className="w-full h-full" resizeMode="cover" />
+      <RNImage
+        {...props}
+        source={{
+          uri: props.uri,
+        }}
+        className={cn("w-full h-full", className)}
+        resizeMode="cover"
+      />
     </AspectRatio>
   );
 }

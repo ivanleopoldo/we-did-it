@@ -24,6 +24,10 @@ export default function RootLayout() {
         <ThemeProvider value={NAV_THEME[colorScheme ?? "light"]}>
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="modal"
+              options={{ presentation: "modal", headerShown: true }}
+            />
           </Stack>
           <PortalHost />
           <Toaster />
