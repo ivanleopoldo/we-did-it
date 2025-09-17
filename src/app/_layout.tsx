@@ -26,7 +26,10 @@ export default function RootLayout() {
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen
               name="modal"
-              options={{ presentation: "modal", headerShown: true }}
+              options={{
+                presentation: "modal",
+                headerShown: true,
+              }}
             />
           </Stack>
           <PortalHost />

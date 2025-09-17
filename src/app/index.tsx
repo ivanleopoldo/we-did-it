@@ -1,12 +1,17 @@
+import React, { useRef } from "react";
+import { Entypo } from "@/components/general/entypo";
 import { Image } from "@/components/general/image";
 import SafeContainer from "@/components/general/safe-container";
 import { ScrollView } from "@/components/general/scroll-view";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
-import React from "react";
 import { Pressable, View } from "react-native";
+import { ActionSheetRef } from "react-native-actions-sheet";
+import { ActionSheet } from "@/components/general/action-sheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type ListItem = {
   createdAt: string;
@@ -17,6 +22,9 @@ type ListItem = {
 };
 
 export default function Home() {
+  const actionSheetRef = useRef<ActionSheetRef>(null);
+  const insets = useSafeAreaInsets();
+
   const data: ListItem[] = Array.from({ length: 10 }).map((_, index) => ({
     createdAt: new Date().toISOString(),
     createdBy: "ivanleopoldo",
@@ -36,7 +44,36 @@ export default function Home() {
             </AvatarFallback>
           </Avatar>
           <View className="flex-1 gap-1">
-            <Text className="font-bold text-lg">{item.username}</Text>
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row gap-1 items-baseline">
+                <Text className="font-bold text-lg">{item.username}</Text>
+                <Text className="text-muted-foreground">1d</Text>
+              </View>
+              <Button
+                onPress={() => actionSheetRef.current?.show()}
+                variant={"ghost"}
+                size={"icon"}
+              >
+                <Entypo name="dots-three-horizontal" />
+              </Button>
+              <ActionSheet
+                safeAreaInsets={insets}
+                gestureEnabled
+                ref={actionSheetRef}
+                indicatorClassName="bg-foreground/30"
+                defaultOverlayOpacity={0.7}
+                containerClassName="bg-muted rounded-t-3xl px-4 pt-2 border border-border"
+              >
+                <View>
+                  <Text>{item.username}</Text>
+                  <Text>{item.username}</Text>
+                  <Text>{item.username}</Text>
+                  <Text>{item.username}</Text>
+                  <Text>{item.username}</Text>
+                  <Text>{item.username}</Text>
+                </View>
+              </ActionSheet>
+            </View>
             <Text className="text-foreground">{item.content}</Text>
           </View>
         </View>
@@ -74,7 +111,9 @@ export default function Home() {
               </Avatar>
               <View className="relative h-full">
                 <Text className="font-bold text-lg">mrzachnugent</Text>
-                <Text className="text-muted-foreground">{"What's new?"}</Text>
+                <Text className="text-muted-foreground">
+                  {"What will you do?"}
+                </Text>
               </View>
             </Pressable>
             <View className="bg-border h-[0.5px]" />
